@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Objection Drill — Pinnacle MP</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+:root{
+  --bg:#0a0a0a;--surface:#111;--surface2:#181818;--border:#222;--border2:#2a2a2a;
+  --text:#f0f0f0;--dim:#888;--muted:#444;
+  --accent:#d4a843;--accent-dim:#a07830;--accent-bg:rgba(212,168,67,0.08);
+  --red:#e05555;--red-bg:rgba(224,85,85,0.08);
+  --green:#3daa6e;--green-bg:rgba(61,170,110,0.08);
+  --orange:#e07a30;--orange-bg:rgba(224,122,48,0.08);
+  --blue:#5a8fd4;--blue-bg:rgba(90,143,212,0.08);
+  --r:8px;--rl:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
+.topbar{background:#080808;border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;}
+.logo span{color:var(--dim);font-weight:400;letter-spacing:0;text-transform:none;margin-left:8px;font-size:12px;}
+.sbar{display:flex;gap:20px;}
+.stat{text-align:center;}
+.sv{font-size:16px;font-weight:600;color:var(--text);}
+.sl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+.sv.g{color:var(--green);}.sv.r{color:var(--red);}.sv.a{color:var(--accent);}
+.layout{display:grid;grid-template-columns:210px 1fr;min-height:calc(100vh - 52px);}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;position:sticky;top:52px;height:calc(100vh - 52px);}
+.sh{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:8px 16px 4px;}
+.ci{padding:7px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-left:2px solid transparent;font-size:13px;color:var(--dim);transition:all 0.1s;}
+.ci:hover{background:var(--surface2);color:var(--text);}
+.ci.on{background:var(--accent-bg);border-left-color:var(--accent);color:var(--accent);}
+.cn{font-size:11px;color:var(--muted);background:var(--surface2);padding:1px 6px;border-radius:10px;}
+.ci.on .cn{background:var(--accent-bg);color:var(--accent-dim);}
+.ms{padding:12px 16px;border-top:1px solid var(--border);margin-top:8px;}
+.mb{display:block;width:100%;padding:8px 12px;margin-bottom:4px;background:transparent;border:1px solid var(--border2);border-radius:var(--r);color:var(--dim);font-size:12px;font-weight:500;cursor:pointer;text-align:left;transition:all 0.1s;}
+.mb:hover{background:var(--surface2);color:var(--text);}
+.mb.on{background:var(--accent-bg);border-color:var(--accent-dim);color:var(--accent);}
+.pbadge{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:1px 5px;border-radius:4px;margin-left:5px;background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-dim);}
+.main{padding:28px 32px;max-width:780px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px;margin-bottom:16px;}
+.ey{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.dp{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:2px 7px;border-radius:20px;}
+.dh{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,85,85,0.25);}
+.dm{background:var(--orange-bg);color:var(--orange);border:1px solid rgba(224,122,48,0.25);}
+.de{background:var(--green-bg);color:var(--green);border:1px solid rgba(61,170,110,0.25);}
+.pf{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-dim);letter-spacing:0.05em;}
+.st{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:var(--orange-bg);color:var(--orange);border:1px solid rgba(224,122,48,0.3);letter-spacing:0.05em;}
+.oq{font-size:20px;font-weight:500;color:var(--text);line-height:1.45;margin-bottom:20px;padding-left:16px;border-left:3px solid var(--border2);border-radius:0;}
+.oq.pri{border-left-color:var(--accent);}
+.rvl{width:100%;padding:11px;background:transparent;border:1px solid var(--border2);border-radius:var(--r);color:var(--dim);font-size:13px;font-weight:500;cursor:pointer;text-align:center;transition:all 0.15s;}
+.rvl:hover{background:var(--surface2);color:var(--text);}
+.rs{display:none;border-top:1px solid var(--border);margin-top:20px;padding-top:20px;}
+.rs.vis{display:block;}
+.sl2{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;}
+.rt{font-size:14px;color:var(--text);line-height:1.8;white-space:pre-wrap;margin-bottom:12px;}
+.eb{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;}
+.el{font-size:10px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+.et{font-size:13px;color:var(--dim);line-height:1.7;white-space:pre-wrap;}
+.cb{background:var(--blue-bg);border:1px solid rgba(90,143,212,0.2);border-radius:var(--r);padding:12px 14px;font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:14px;}
+.cb strong{color:var(--blue);font-weight:600;}
+.sb{background:var(--orange-bg);border:1px solid rgba(224,122,48,0.2);border-radius:var(--r);padding:12px 14px;font-size:13px;color:var(--dim);line-height:1.7;margin-bottom:14px;}
+.sb strong{color:var(--orange);font-weight:600;}
+.rr{display:flex;gap:8px;margin-top:4px;}
+.rb{flex:1;padding:9px;border-radius:var(--r);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--dim);transition:all 0.1s;}
+.rb.n{border-color:rgba(61,170,110,0.4);color:var(--green);}
+.rb.n:hover{background:var(--green-bg);}
+.rb.al{border-color:rgba(224,122,48,0.4);color:var(--orange);}
+.rb.al:hover{background:var(--orange-bg);}
+.rb.w{border-color:rgba(224,85,85,0.4);color:var(--red);}
+.rb.w:hover{background:var(--red-bg);}
+.nr{display:flex;align-items:center;justify-content:space-between;}
+.nb{padding:9px 18px;background:transparent;border:1px solid var(--border2);border-radius:var(--r);color:var(--dim);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.1s;}
+.nb:hover:not(:disabled){background:var(--surface2);color:var(--text);}
+.nb:disabled{opacity:0.25;cursor:default;}
+.co{font-size:13px;color:var(--muted);}
+/* VOICE */
+.vcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:28px;margin-bottom:16px;}
+.voy{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.voq{font-size:22px;font-weight:500;color:var(--text);line-height:1.4;padding-left:16px;border-left:3px solid var(--accent);margin-bottom:24px;border-radius:0;}
+.ma{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px 0;}
+.mic{width:72px;height:72px;border-radius:50%;border:2px solid var(--border2);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.mic:hover{border-color:var(--accent-dim);background:var(--accent-bg);}
+.mic.rec{border-color:var(--red);background:var(--red-bg);animation:pulse 1.2s ease-in-out infinite;}
+.mic.done{border-color:var(--green);background:var(--green-bg);}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,85,85,0.3);}50%{box-shadow:0 0 0 10px rgba(224,85,85,0);}}
+.mico{width:28px;height:28px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.mic.rec .mico{stroke:var(--red);}
+.mic.done .mico{stroke:var(--green);}
+.mic:not(.rec):not(.done) .mico{stroke:var(--dim);}
+.mst{font-size:13px;color:var(--dim);text-align:center;}
+.mst.rec{color:var(--red);}.mst.done{color:var(--green);}
+.wf{display:flex;align-items:center;gap:3px;height:28px;opacity:0;transition:opacity 0.2s;}
+.wf.on{opacity:1;}
+.wb{width:3px;background:var(--red);border-radius:2px;height:6px;animation:wv 0.8s ease-in-out infinite;}
+.wb:nth-child(1){animation-delay:0s;}.wb:nth-child(2){animation-delay:0.1s;}.wb:nth-child(3){animation-delay:0.2s;}
+.wb:nth-child(4){animation-delay:0.3s;}.wb:nth-child(5){animation-delay:0.2s;}.wb:nth-child(6){animation-delay:0.1s;}.wb:nth-child(7){animation-delay:0s;}
+@keyframes wv{0%,100%{height:4px;}50%{height:22px;}}
+.vc{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.vb{padding:8px 16px;background:transparent;border:1px solid var(--border2);border-radius:var(--r);color:var(--dim);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.1s;}
+.vb:hover:not(:disabled){background:var(--surface2);color:var(--text);}
+.vb.pri{border-color:var(--accent-dim);color:var(--accent);background:var(--accent-bg);}
+.vb.pri:hover:not(:disabled){background:rgba(212,168,67,0.15);}
+.vb:disabled{opacity:0.3;cursor:default;}
+/* COMPARE PANEL */
+.cp{display:none;border-top:1px solid var(--border);margin-top:22px;padding-top:22px;}
+.cp.vis{display:block;}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.cc{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
+.ccl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
+.cc.you .ccl{color:var(--blue);}
+.cc.ideal .ccl{color:var(--green);}
+.cct{font-size:13px;color:var(--dim);line-height:1.8;white-space:pre-wrap;}
+.cc.you .cct{color:var(--text);}
+.lnav{display:flex;align-items:center;gap:10px;}
+.lm{font-size:12px;color:var(--muted);font-style:italic;}
+/* BROWSE */
+.bl{display:flex;flex-direction:column;gap:4px;}
+.br{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;gap:12px;transition:all 0.1s;}
+.br:hover{background:var(--surface2);}
+.bo{font-size:13px;color:var(--text);flex:1;}
+.bm{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.bc{font-size:11px;color:var(--muted);}
+.md{width:7px;height:7px;border-radius:50%;background:var(--border2);flex-shrink:0;}
+.md.g{background:var(--green);}.md.ok{background:var(--orange);}.md.r{background:var(--red);}
+.pban{background:var(--accent-bg);border:1px solid var(--accent-dim);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--accent);margin-bottom:14px;line-height:1.6;}
+.pban strong{font-weight:600;}
+/* TYPE FALLBACK */
+.tbox{width:100%;margin-top:12px;text-align:left;}
+.tbox p{font-size:12px;color:var(--dim);margin-bottom:8px;}
+.tinp{width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:inherit;font-size:13px;line-height:1.7;resize:vertical;min-height:70px;}
+.tinp:focus{outline:none;border-color:var(--accent-dim);}
+.tsub{margin-top:8px;width:100%;padding:10px;background:var(--accent-bg);border:1px solid var(--accent-dim);border-radius:var(--r);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.1s;}
+.tsub:hover{background:rgba(212,168,67,0.15);}
+.hidden{display:none!important;}
+.view{display:none;}
+.view.on{display:block;}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">Insurance Athlete <span>Objection Drill — Pinnacle MP</span></div>
+  <div class="sbar">
+    <div class="stat"><div class="sv" id="sv">0</div><div class="sl">Reviewed</div></div>
+    <div class="stat"><div class="sv g" id="sg">0</div><div class="sl">Nailed</div></div>
+    <div class="stat"><div class="sv r" id="sb">0</div><div class="sl">Need Work</div></div>
+    <div class="stat"><div class="sv a" id="sp">—</div><div class="sl">Mastery</div></div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div><div class="sh">Filter</div><div id="catlist"></div></div>
+    <div class="ms">
+      <div class="sh" style="padding:0 0 6px;">Mode</div>
+      <button class="mb on" onclick="setMode('f')">📖 Flashcards</button>
+      <button class="mb" onclick="setMode('v')">🎙 Voice Drill</button>
+      <button class="mb" onclick="setMode('b')">☰ Browse All</button>
+    </div>
+    <div class="ms" style="border-top:1px solid var(--border);padding-top:12px;">
+      <div class="sh" style="padding:0 0 6px;">Quick Start</div>
+      <button class="mb" onclick="loadPri()" style="color:var(--accent);border-color:var(--accent-dim);">⚡ Priority Deck</button>
+      <button class="mb" onclick="loadSmk()" style="color:var(--orange);border-color:rgba(224,122,48,0.4);">🔥 Smokescreens Only</button>
+      <button class="mb" onclick="resetAll()">↺ Reset Ratings</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- FLASHCARD -->
+    <div class="view on" id="f-view">
+      <div id="pban-f" class="pban hidden"><strong>Priority Deck active</strong> — Master these 6 first. Not Interested, Don't Remember, and Already Covered are smokescreens.</div>
+      <div class="card">
+        <div class="ey"><span>They say —</span><span id="fd"></span><span id="fp"></span><span id="fs"></span></div>
+        <div class="oq" id="fq"></div>
+        <button class="rvl" id="rvl" onclick="togR()">Show response</button>
+        <div class="rs" id="rs">
+          <div class="sl2">Your response</div>
+          <div class="rt" id="rt"></div>
+          <div id="ea"></div>
+          <div id="sna"></div>
+          <div class="cb" id="fcb"></div>
+          <div class="sl2">How did you do?</div>
+          <div class="rr">
+            <button class="rb n" onclick="rate('good')">✓ Nailed it</button>
+            <button class="rb al" onclick="rate('ok')">~ Almost</button>
+            <button class="rb w" onclick="rate('bad')">✗ Need work</button>
+          </div>
+        </div>
+      </div>
+      <div class="nr">
+        <button class="nb" id="fpb" onclick="nav(-1)">← Prev</button>
+        <span class="co" id="fc"></span>
+        <button class="nb" id="fnb" onclick="nav(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- VOICE DRILL -->
+    <div class="view" id="v-view">
+      <div id="pban-v" class="pban hidden"><strong>Priority Deck active</strong> — Speak every rebuttal out loud. Can't advance until you record or type.</div>
+      <div class="vcard">
+        <div class="voy"><span>They say —</span><span id="vd"></span><span id="vp"></span><span id="vs"></span></div>
+        <div class="voq" id="vq"></div>
+        <div class="ma" id="mic-area">
+          <div class="wf" id="wf"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
+          <button class="mic" id="micbtn" onclick="togRec()">
+            <svg class="mico" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+          </button>
+          <div class="mst" id="mst">Tap mic and say your rebuttal</div>
+          <div class="vc">
+            <button class="vb" id="rpb" onclick="replayAudio()" disabled>▶ Replay</button>
+            <button class="vb" id="rdb" onclick="redoRec()" disabled>✕ Redo</button>
+            <button class="vb pri" id="shwbtn" onclick="showCompare()" disabled>Compare responses →</button>
+          </div>
+        </div>
+
+        <!-- COMPARE PANEL -->
+        <div class="cp" id="cp">
+          <div class="cg">
+            <div class="cc you"><div class="ccl">You said</div><div class="cct" id="vtrans">—</div></div>
+            <div class="cc ideal"><div class="ccl">Ideal response</div><div class="cct" id="videal"></div></div>
+          </div>
+          <div id="vea"></div>
+          <div id="vsa"></div>
+          <div class="cb" id="vcb"></div>
+          <div class="sl2">How did you do?</div>
+          <div class="rr">
+            <button class="rb n" onclick="vrate('good')">✓ Nailed it</button>
+            <button class="rb al" onclick="vrate('ok')">~ Almost</button>
+            <button class="rb w" onclick="vrate('bad')">✗ Need work</button>
+          </div>
+        </div>
+      </div>
+      <div class="nr">
+        <button class="nb" id="vpb" onclick="nav(-1)">← Prev</button>
+        <span class="co" id="vc"></span>
+        <div class="lnav">
+          <span class="lm" id="lm">🔒 Record first</span>
+          <button class="nb" id="vnb" onclick="nav(1)" disabled>Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BROWSE -->
+    <div class="view" id="b-view">
+      <div class="bl" id="bl"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const OBJ=[
+{id:1,cat:"Not Interested",d:"hard",pri:true,sm:true,obj:"I'm not interested.",resp:`"Understandably, most people aren't interested until they get cancer, get disabled, or God forbid pass away. Anyway, it looks like the address we have on file for the home is ____?"`,esc:[`(2nd) "Hmm — I'm assuming what was on your mind when you submitted this request was simply providing some practical, affordable coverage to protect the home and your family, God forbid when something does happen to you…?"`,`(3rd) "Ok — are you afraid the price is going to be too high, or are you afraid you're going to be declined?"`],sn:"Almost always a smokescreen. They don't know what you're offering yet. Acknowledge and redirect — don't defend. Run all 3 escalation levels until automatic.",cn:"Crane rule: acknowledge → redirect with a question. Never defend. Silence after the 3rd level. Price vs. declined pivot isolates the REAL objection."},
+{id:2,cat:"Don't Remember",d:"medium",pri:true,sm:true,obj:"I don't remember filling anything out.",resp:`"Did maybe a spouse fill it out? Or a child? Do you currently have any protection for your family that pays out if you're sick, disabled, or pass away? Ok — if you're anything like me I forgot what I had for breakfast. This will be quick — go ahead and grab a pen and paper and we can get this taken care of for you."`,esc:[],sn:"Classic smokescreen. They filled it out — they just don't want to engage. Normalize it, check if a family member submitted it, then pivot to discovery.",cn:"Never let memory loss kill the call. Pivot immediately to: do they have coverage or not?"},
+{id:3,cat:"Already Have Coverage",d:"hard",pri:true,sm:true,obj:"I already got this taken care of.",resp:`"Perfect, that's the reason for my call. I see that on your file here. To confirm I'm speaking with the right person — the address we have on file for the policy is ____? And your DOB is ____? Gotcha. I'm the supervisor following up because one of our junior underwriters helped you with coverage but didn't update your file here…"\n\nThen diagnose: complete or partial plan? How much coverage? Monthly cost? Which carrier? B-rated? Any health issues?`,esc:[],sn:"Smokescreen 90% of the time. Even if they have a policy — this is a FLIP or living benefits upgrade. Audit their current coverage. B-rated or overpaying = your lane.",cn:"Treat 'already covered' as a diagnostic, not a dead end. Find the gap — carrier rating, no living benefits, overpaying — and position as the upgrade."},
+{id:4,cat:"Not Interested",d:"hard",pri:true,sm:false,obj:"Take me off the list.",resp:`"To be frank with you ___, there is no list. I'm sorry you may be confused — this is the request YOU submitted in regards to protecting your family, God forbid you were to get cancer, become disabled, or pass away. Anyway, it looks like the address we have on file for the home is ____?"`,esc:[],sn:null,cn:"Reframe authority. They submitted the request — you're following up on THEIR action. Don't apologize for calling. Stay calm. Project certainty and move forward."},
+{id:5,cat:"Already Have Coverage",d:"hard",pri:true,sm:false,obj:"I have life insurance through work.",resp:`"That's great that you have some through work — but after you leave, retire, or change jobs, all that coverage goes away. And worst case: if you get cancer or some illness and end up getting laid off, you lose those benefits too, and most likely you wouldn't be able to qualify health-wise for coverage after that. These are private bills, meant to be supplemented with private insurance. Anyway, it looks like the address we have on file for the home is ____?"`,esc:[],sn:null,cn:"Group coverage is the gift that disappears. Make them feel the gap — then move on. 'Private bills… supplemented with private insurance' is the key reframe."},
+{id:6,cat:"Stall",d:"hard",pri:true,sm:false,obj:"I need to think about it / talk to my spouse.",resp:`"Sure — do you need to think about whether or not you want the coverage at all, or do you know you want the coverage, it's just a matter of which option you want to pick?"\n\n(If they want it:) "Honestly I'd recommend starting out at the low end for what you know you can afford — you're going to see me twice. Once now, and a year from now for your annual review. If you want to bump up coverage at that point, you absolutely can. Anyway, the address we have on file to mail the policy out to is ____ right?"`,esc:[],sn:null,cn:"Isolate it first. 'Think about it' is almost always one of two things. Find out which before you respond. Then close on the low end."},
+{id:7,cat:"Price / Budget",d:"hard",pri:false,sm:false,obj:"I can't afford it.",resp:`"I completely understand — protecting your family is the most important priority, but we also want to make sure this coverage isn't taking food off the table. I see on your file you were quoted some pretty steep numbers by our sales rep… which is the reason for my call. I'm the medical underwriter assigned to figure out more practical, affordable options."`,esc:[],sn:null,cn:"Position yourself as the solution to their price problem. You're the senior underwriter fixing what a junior rep botched."},
+{id:8,cat:"Price / Budget",d:"medium",pri:false,sm:false,obj:"Do you have anything cheaper?",resp:`"When you jump out of a plane, do you want the cheapest parachute or the best parachute? If you just want cheap life insurance I can certainly help you with that — but you mentioned the [cash value / living benefits] was important to you?"`,esc:[],sn:null,cn:"Answer price objections with value anchors, not discounts. Pull what they said mattered in discovery back to the surface."},
+{id:9,cat:"Price / Budget",d:"hard",pri:false,sm:false,obj:"The price is too high.",resp:`"Correct — I see that on your file. Looks like you were quoted some pretty high numbers by one of my sales reps. I'm the manager for the [county/city] area who's been assigned to figure out more practical, affordable options that make sense for your budget."`,esc:[],sn:null,cn:"Own the bad quote — then position yourself as the fix. You're the hero solving a problem a junior rep created."},
+{id:10,cat:"Stall",d:"medium",pri:false,sm:false,obj:"Do I have to make a decision today?",resp:`"Yes, I do need to submit the original coverage through today. However, since most of us need time to look over our finances — which is completely understandable — I'd recommend simply starting out on the low end for what you know you can afford. You can always bump it up. I also do annual reviews so we'll revisit it a year from now. Anyway, the address we have on file to mail the policy out to is ____ right?"`,esc:[],sn:null,cn:"Own the urgency — don't waffle. Soften the landing with the annual review frame and low-end start."},
+{id:11,cat:"Stall",d:"medium",pri:false,sm:true,obj:"Just send me some information.",resp:`"Absolutely — and I actually need to go over a few things with you first to make sure I'm sending you the right information for your situation. Go ahead and grab a pen and paper real quick, this will only take a few minutes."`,esc:[],sn:"Classic delay tactic. 'Send me info' = I want to get off this call. Don't cave. Use it as an entry point into discovery.",cn:"If you agree to email something, you've lost the call. Keep them on the phone."},
+{id:12,cat:"Hostile",d:"medium",pri:false,sm:false,obj:"I'm busy right now. Call me back.",resp:`"I'm really busy as well and I have a lot of families to get to. I'll make this brief — go ahead and grab something to write with so we can get this taken care of real quick."`,esc:[],sn:null,cn:"Match their energy. Never beg for a callback. If they hang up: 'Hi ___, seems we got disconnected there.'"},
+{id:13,cat:"Hostile",d:"easy",pri:false,sm:false,obj:"I'm driving.",resp:`"I don't want you to get in an accident — go ahead and pull over real quick, I'll get your information pulled up."`,esc:[],sn:null,cn:"Don't offer a callback. Safety is the frame. It's hard to say no to someone looking out for them."},
+{id:14,cat:"Hostile",d:"easy",pri:false,sm:false,obj:"I'm at work.",resp:`"Perfect — I'll make this brief. Go ahead and grab something to write with so we can get this taken care of real quick."`,esc:[],sn:null,cn:"'I'm at work' is a soft stall. Don't offer to call back — just keep moving."},
+{id:15,cat:"Hostile",d:"hard",pri:false,sm:false,obj:"They hung up on me.",resp:`"Hi ___, seems we got disconnected there." (Then go right back into the script or repeat what they said before they hung up.)`,esc:[],sn:null,cn:"Call back immediately. The 'disconnected' frame lets them save face. Most agents never call back — this alone sets you apart."},
+{id:16,cat:"Confused / Wrong Product",d:"medium",pri:false,sm:false,obj:"I already have homeowners insurance through Allstate.",resp:`"Has anyone explained the difference between homeowners insurance and mortgage protection to you before? Homeowners covers the structure — the roof, the walls, the property. Mortgage protection covers YOU — if you get sick, become disabled, or pass away, this pays the mortgage so your family doesn't lose the home. Two completely different things. Make sense?"`,esc:[],sn:null,cn:"Don't make them feel dumb. Use a curious, educational tone. Then pivot back with the address close."},
+{id:17,cat:"Confused / Wrong Product",d:"medium",pri:false,sm:false,obj:"We took care of that at closing.",resp:`"Correct — you took care of your mortgage at closing. I'm calling in regards to the mortgage protection. The banks used to offer this before 2008 — now it's contracted out directly to the insurance carriers, which is who I work with. It's my job as the underwriter licensed with the state to run it through the various companies and figure out which option makes the most sense for you and your family. Make sense?"`,esc:[],sn:null,cn:"Position the confusion as a systemic change — not their fault. You're the expert clarifying how it works now."},
+{id:18,cat:"Confused / Wrong Product",d:"easy",pri:false,sm:false,obj:"We don't need mortgage protection — we have life insurance.",resp:`"Gotcha — has anyone explained the difference between mortgage protection and life insurance to you before? Both pay out a check to your beneficiary when you pass away. What makes mortgage protection better for the home is that it covers the LIVING side too — not just death. Cancer, disability, heart attack, stroke — this policy pays out to supplement lost income and cover medical bills. The number-one cause of bankruptcies and foreclosures isn't death — it's unforeseen medical bills and disability. You have an 89% higher likelihood of becoming sick or disabled than dying. Does that make sense?"`,esc:[],sn:null,cn:"The living benefits education is your ace. Slow down on '89%' — let it land."},
+{id:19,cat:"Confused / Wrong Product",d:"easy",pri:false,sm:false,obj:"Is this required?",resp:`"Oooof… I mean… technically they won't take your home away if you don't… but you'd be one of the rare people not to put it in place since it's just such crucial coverage. It'd be like driving a car without car insurance, if that makes sense."`,esc:[],sn:null,cn:"Play slightly confused — not defensive. The car insurance analogy lands fast."},
+{id:20,cat:"Confused / Wrong Product",d:"easy",pri:false,sm:false,obj:"Are you with my bank or lender?",resp:`"Yep, great question — [their lender] handles the mortgage, refi, and equity side of things. After closing it's passed off to the mortgage protection department. It's always done right after closing and separately from the home, so that you're the beneficiary now — not the bank. Does that make sense?"`,esc:[],sn:null,cn:"Key point: they're the beneficiary now, not the bank. That reframe shifts emotional ownership."},
+{id:21,cat:"Social / Banking",d:"medium",pri:false,sm:false,obj:"I'm not comfortable giving my social security number.",resp:`"Understood, ___. The insurance carrier requires it because that's how they check your medical and prescription history — and it prevents fraud so someone can't sign up for coverage in your name. Does that make sense? Go ahead and confirm that social with me again?"\n\n(If more pushback:) "We carry insurance — if anyone got through all our firewalls and accessed your info, you'd be covered for up to a million dollars. That should be enough, right? Ok, go ahead with the social."`,esc:[],sn:null,cn:"Front-load social and banking objections EARLY — before the close. If they're raising it here, you waited too long."},
+{id:22,cat:"Social / Banking",d:"medium",pri:false,sm:false,obj:"I'm not comfortable giving my bank account info.",resp:`"The insurance carrier requires either a voided check or account number to verify there's no fraud linked to your account — and that's how you'll pay for the policy once you're approved. Anyway, it looks like the address we have on file to mail the policy out to is ____?"`,esc:[],sn:null,cn:"Frame it as carrier compliance and fraud protection. Move immediately to the address close."},
+{id:23,cat:"Already Have Coverage",d:"medium",pri:false,sm:false,obj:"We're going to sell the home.",resp:`"Perfect — this coverage actually sticks with you and transfers when you buy a new home. Do you plan on staying local or moving out of state?"`,esc:[],sn:null,cn:"Portability is your answer. Flip it into discovery about their next home. If they already sold — pivot to life insurance."},
+{id:24,cat:"Confused / Wrong Product",d:"easy",pri:false,sm:false,obj:"We don't have that lender anymore.",resp:`"Correct — that's the reason for my call. I see that on your file, which is probably why it's still pending and slipped through the cracks on our end here, I apologize. To confirm I'm speaking with the right person — the address we have on file for the mortgage is ____? Gotcha — this is the coverage that takes care of the home God forbid you become sick, disabled, or pass away. Make sense?"`,esc:[],sn:null,cn:"Validate the lender change, use it as the reason for the follow-up, then transition to confirming the problem the coverage solves."}
+];
+
+const CATS=['All','Not Interested','Already Have Coverage',"Don't Remember",'Price / Budget','Stall','Hostile','Confused / Wrong Product','Social / Banking'];
+let idx=0,mode='f',filt='All',cards=[...OBJ],ratings={};
+let mr=null,chunks=[],ablob=null,aurl=null,ael=null,rec=false,hasRec=false;
+
+function buildCats(){
+  document.getElementById('catlist').innerHTML=CATS.map(c=>{
+    const n=c==='All'?OBJ.length:OBJ.filter(o=>o.cat===c).length;
+    const hp=c==='All'?OBJ.some(o=>o.pri):OBJ.some(o=>o.cat===c&&o.pri);
+    return`<div class="ci ${c===filt?'on':''}" onclick="setFilt('${c.replace(/'/g,"\\'")}')"><span>${c}${hp?'<span class="pbadge">★</span>':''}</span><span class="cn">${n}</span></div>`;
+  }).join('');
+}
+
+function setFilt(f){
+  filt=f;idx=0;cards=f==='All'?[...OBJ]:OBJ.filter(o=>o.cat===f);
+  buildCats();resetV();renderCard();
+  document.getElementById('pban-f').classList.add('hidden');
+  document.getElementById('pban-v').classList.add('hidden');
+  if(mode==='b')renderBrowse();
+}
+
+function loadPri(){
+  cards=OBJ.filter(o=>o.pri);filt='All';idx=0;buildCats();resetV();
+  document.getElementById('pban-f').classList.remove('hidden');
+  document.getElementById('pban-v').classList.remove('hidden');
+  setMode(mode==='b'?'v':mode);renderCard();
+}
+
+function loadSmk(){
+  cards=OBJ.filter(o=>o.sm);filt='All';idx=0;buildCats();resetV();
+  document.getElementById('pban-f').classList.add('hidden');
+  document.getElementById('pban-v').classList.add('hidden');
+  setMode(mode==='b'?'v':mode);renderCard();
+}
+
+function resetAll(){ratings={};updateStats();if(mode==='b')renderBrowse();}
+
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.mb').forEach((b,i)=>{if(i<3)b.classList.toggle('on',['f','v','b'][i]===m);});
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById(m+'-view').classList.add('on');
+  if(m==='b')renderBrowse();else{resetV();renderCard();}
+}
+
+function nav(d){
+  const n=idx+d;if(n<0||n>=cards.length)return;
+  idx=n;resetV();
+  document.getElementById('rs')?.classList.remove('vis');
+  const r=document.getElementById('rvl');if(r)r.textContent='Show response';
+  renderCard();
+}
+
+function togR(){
+  const s=document.getElementById('rs'),b=document.getElementById('rvl');
+  const v=s.classList.contains('vis');s.classList.toggle('vis',!v);
+  b.textContent=v?'Show response':'Hide response';
+}
+
+function rate(v){ratings[cards[idx].id]=v;updateStats();nav(1);}
+function vrate(v){ratings[cards[idx].id]=v;updateStats();nav(1);}
+
+function updateStats(){
+  const vs=Object.values(ratings);
+  const rv=vs.length,g=vs.filter(v=>v==='good').length,b=vs.filter(v=>v==='bad').length;
+  document.getElementById('sv').textContent=rv;
+  document.getElementById('sg').textContent=g;
+  document.getElementById('sb').textContent=b;
+  document.getElementById('sp').textContent=rv?Math.round((g/rv)*100)+'%':'—';
+}
+
+function dpill(d){
+  if(d==='hard')return'<span class="dp dh">Hard</span>';
+  if(d==='medium')return'<span class="dp dm">Medium</span>';
+  return'<span class="dp de">Easy</span>';
+}
+
+function renderCard(){
+  if(!cards.length)return;
+  const c=cards[idx];
+  if(mode==='f'){
+    const q=document.getElementById('fq');
+    q.textContent='"'+c.obj+'"';q.className='oq'+(c.pri?' pri':'');
+    document.getElementById('fd').innerHTML=dpill(c.d);
+    document.getElementById('fp').innerHTML=c.pri?'<span class="pf">★ Priority</span>':'';
+    document.getElementById('fs').innerHTML=c.sm?'<span class="st">🔥 Smokescreen</span>':'';
+    document.getElementById('rt').textContent=c.resp;
+    document.getElementById('ea').innerHTML=c.esc&&c.esc.length?`<div class="eb"><div class="el">Escalation levels</div><div class="et">${c.esc.join('\n\n')}</div></div>`:'';
+    document.getElementById('sna').innerHTML=c.sn?`<div class="sb"><strong>🔥 Smokescreen:</strong> ${c.sn}</div>`:'';
+    document.getElementById('fcb').innerHTML=`<strong>Coach:</strong> ${c.cn}`;
+    document.getElementById('fc').textContent=(idx+1)+' / '+cards.length;
+    document.getElementById('fpb').disabled=idx===0;
+    document.getElementById('fnb').disabled=idx===cards.length-1;
+  }
+  if(mode==='v'){
+    const q=document.getElementById('vq');q.textContent='"'+c.obj+'"';
+    document.getElementById('vd').innerHTML=dpill(c.d);
+    document.getElementById('vp').innerHTML=c.pri?'<span class="pf">★ Priority</span>':'';
+    document.getElementById('vs').innerHTML=c.sm?'<span class="st">🔥 Smokescreen</span>':'';
+    document.getElementById('vc').textContent=(idx+1)+' / '+cards.length;
+    document.getElementById('vpb').disabled=idx===0;
+    setLk(!hasRec);
+    document.getElementById('videal').textContent=c.resp;
+    document.getElementById('vea').innerHTML=c.esc&&c.esc.length?`<div class="eb"><div class="el">Escalation levels</div><div class="et">${c.esc.join('\n\n')}</div></div>`:'';
+    document.getElementById('vsa').innerHTML=c.sn?`<div class="sb"><strong>🔥 Smokescreen:</strong> ${c.sn}</div>`:'';
+    document.getElementById('vcb').innerHTML=`<strong>Coach:</strong> ${c.cn}`;
+  }
+}
+
+function setLk(l){
+  document.getElementById('vnb').disabled=l;
+  document.getElementById('lm').style.display=l?'inline':'none';
+}
+
+function resetV(){
+  if(rec)stopRec();
+  rec=false;hasRec=false;ablob=null;aurl=null;ael=null;chunks=[];
+  const mic=document.getElementById('micbtn');const mst=document.getElementById('mst');
+  const wf=document.getElementById('wf');const cp=document.getElementById('cp');
+  const ma=document.getElementById('mic-area');
+  if(!mic)return;
+  mic.className='mic';mic.style.display='';
+  mst.textContent='Tap mic and say your rebuttal';mst.className='mst';mst.style.display='';
+  wf.classList.remove('on');wf.style.display='';
+  cp&&cp.classList.remove('vis');
+  document.getElementById('rpb').disabled=true;
+  document.getElementById('rdb').disabled=true;
+  document.getElementById('shwbtn').disabled=true;
+  document.getElementById('vtrans').textContent='—';
+  const tb=document.getElementById('type-fallback-box');if(tb)tb.remove();
+  setLk(true);
+}
+
+async function togRec(){if(rec)stopRec();else await startRec();}
+
+async function startRec(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    chunks=[];
+    mr=new MediaRecorder(stream);
+    mr.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+    mr.onstop=()=>{
+      ablob=new Blob(chunks,{type:'audio/webm'});
+      aurl=URL.createObjectURL(ablob);
+      ael=new Audio(aurl);
+      stream.getTracks().forEach(t=>t.stop());
+      finRec();
+    };
+    mr.start();rec=true;
+    document.getElementById('micbtn').className='mic rec';
+    document.getElementById('mst').textContent='Recording… tap to stop';
+    document.getElementById('mst').className='mst rec';
+    document.getElementById('wf').classList.add('on');
+  }catch(e){
+    showTypeFallback();
+  }
+}
+
+function stopRec(){
+  if(mr&&mr.state!=='inactive')mr.stop();
+  rec=false;document.getElementById('wf').classList.remove('on');
+}
+
+function finRec(){
+  hasRec=true;
+  document.getElementById('micbtn').className='mic done';
+  document.getElementById('mst').textContent='Recorded ✓ — replay, redo, or compare';
+  document.getElementById('mst').className='mst done';
+  document.getElementById('rpb').disabled=false;
+  document.getElementById('rdb').disabled=false;
+  document.getElementById('shwbtn').disabled=false;
+  setLk(false);
+  document.getElementById('vtrans').textContent='Tap "Compare responses" to see how you did.';
+}
+
+function showTypeFallback(){
+  document.getElementById('micbtn').style.display='none';
+  document.getElementById('wf').style.display='none';
+  document.getElementById('mst').style.display='none';
+  const ma=document.getElementById('mic-area');
+  if(document.getElementById('type-fallback-box'))return;
+  const box=document.createElement('div');
+  box.id='type-fallback-box';
+  box.className='tbox';
+  box.innerHTML='<p>Mic unavailable — say your rebuttal out loud, then type it to compare:</p><textarea class="tinp" id="tinp" placeholder="Type your rebuttal here..."></textarea><button class="tsub" onclick="submitTyped()">Compare responses →</button>';
+  ma.appendChild(box);
+  hasRec=true;setLk(false);
+  document.getElementById('shwbtn').disabled=false;
+}
+
+function submitTyped(){
+  const inp=document.getElementById('tinp');
+  if(!inp||!inp.value.trim())return;
+  document.getElementById('vtrans').textContent=inp.value.trim();
+  showCompare();
+}
+
+function replayAudio(){if(ael){ael.currentTime=0;ael.play();}}
+function redoRec(){resetV();renderCard();}
+
+function showCompare(){
+  const cp=document.getElementById('cp');
+  cp.classList.add('vis');
+  cp.scrollIntoView({behavior:'smooth',block:'nearest'});
+  if(document.getElementById('vtrans').textContent==='—'||document.getElementById('vtrans').textContent==='Tap "Compare responses" to see how you did.'){
+    document.getElementById('vtrans').textContent='[Audio recorded — replay to self-grade, or redo and type your rebuttal for a text comparison]';
+  }
+}
+
+function renderBrowse(){
+  document.getElementById('bl').innerHTML=cards.map((c,i)=>{
+    const r=ratings[c.id];const dc=r==='good'?'g':r==='bad'?'r':r==='ok'?'ok':'';
+    return`<div class="br" onclick="jumpTo(${i})"><span class="bo">"${c.obj}"</span><div class="bm">${c.pri?'<span class="pf">★</span>':''}${c.sm?'<span class="st">Smoke</span>':''}<span class="bc">${c.cat}</span>${dpill(c.d)}<div class="md ${dc}"></div></div></div>`;
+  }).join('');
+}
+
+function jumpTo(i){idx=i;setMode('v');}
+buildCats();renderCard();
+</script>
+</body>
+</html>
